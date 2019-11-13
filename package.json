@@ -1,6 +1,6 @@
 {
   "name": "@layerframers/whereami",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Tools that help with fetching location based info when building production SSR apps, e.g. NextJS. Client vs. Server, Staging vs. Production, etc.",
   "main": "index.js",
   "directories": {},
