@@ -1,0 +1,32 @@
+{
+  "name": "whereami",
+  "version": "1.0.0",
+  "description": "Tools that help with fetching location based info when building production SSR apps, e.g. NextJS. Client vs. Server, Staging vs. Production, etc.",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/layerframe/whereami.git"
+  },
+  "keywords": [
+    "tool",
+    "ssr",
+    "nextjs",
+    "whereami",
+    "service",
+    "node",
+    "client",
+    "server"
+  ],
+  "author": "Rob Sawyer",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/layerframe/whereami/issues"
+  },
+  "homepage": "https://github.com/layerframe/whereami#readme"
+}
