@@ -25,7 +25,7 @@
  *
  * Fill in your server specifics below.
  */
-import os from 'os'
+const os = require('os')
 
 const PORT = process.env.PORT || 3000
 // Local development url
