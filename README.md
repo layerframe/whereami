@@ -3,12 +3,12 @@
 
 # Getting started 
 
-1. `yarn add whereami`
+1. `yarn add @layerframers/whereami`
 1. Set a staging url by creating an env var named `STAGING_URL` or `STAGE_URL`
 1. Set a production url by creating an env var named `PRODUCTION_URL` or `LIVE_URL`
 1. In your script use the following
 ```
-import whereami from whereami
+import whereami from '@layerframers/whereami'
 
 ...
 // This is checks to see if you're on, staging, production or local and on the client or server side.
