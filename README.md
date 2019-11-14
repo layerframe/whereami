@@ -9,10 +9,19 @@
 1. In your script use the following
 ```
 import whereami from '@layerframers/whereami'
-
 ...
 // This is checks to see if you're on, staging, production or local and on the client or server side.
 const host = whereami.now()
+```
+
+# Google App Engine Features
+This node modules plays well with Google App Engine. To check for a staging environment running on Google App Engine, just set the following environment variables in you `app.yaml`. 
+
+By setting `WHEREAMI_GCP_CHECK` to true, you turn on GCP checking. You then need to set the staging key. This is basically an indicator or difference in the name e.g. `-staging`. This value is checked against the global env var on Google App Engine named `GOOGLE_CLOUD_PROJECT` via the `indexOf` method of Javascript.
+
+```
+WHEREAMI_GCP_CHECK: {bool} true/false (Defaults to false)
+WHEREAMI_GCP_STAGE_KEY {string} '-staging' (Defaults to null)
 ```
 
 # Usage
