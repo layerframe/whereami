@@ -17,7 +17,7 @@ const host = whereami.now()
 # Google App Engine Features
 This node modules plays well with Google App Engine. To check for a staging environment running on Google App Engine, just set the following environment variables in you `app.yaml`. 
 
-By setting `WHEREAMI_GCP_CHECK` to true, you turn on GCP checking. You then need to set the staging key. This is basically an indicator or difference in the name e.g. `-staging`. This value is checked against the global env var on Google App Engine named `GOOGLE_CLOUD_PROJECT` via the `indexOf` method of Javascript.
+By setting `WHEREAMI_GCP_CHECK` to true, you turn on GCP checking. You then need to set the staging key. This is basically an indicator or difference in the name e.g. `-staging`. This value is checked against the [Google Cloud environment variable](https://cloud.google.com/functions/docs/env-var) named `GOOGLE_CLOUD_PROJECT` via the [`indexOf`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/indexOf) method of Javascript.
 
 ```
 WHEREAMI_GCP_CHECK: {bool} true/false (Defaults to false)
@@ -27,4 +27,10 @@ WHEREAMI_GCP_STAGE_KEY {string} '-staging' (Defaults to null)
 # Usage
 
 - `whereami.now()`: Returns the hostname
+- `whereami.log()`: Prints out helpful log info
 - `whereami.isStaging`: Tells you if you're on your staging server or not
+- `whereami.isProduction`: Tells you if you're on your production server or not
+- `whereami.isLocal`: Tells you if you're on your local server or not
+- `whereami.isDev`: Tells you if you're on your local server or not
+- `whereami.isServer`: Tells you if you're on the server or not
+- `whereami.isClient`: Tells you if you're on the client/browser or not
