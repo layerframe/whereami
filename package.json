@@ -1,12 +1,13 @@
 {
   "name": "@layerframers/whereami",
-  "version": "1.1.6",
+  "version": "1.1.7",
   "description": "Tools that help with fetching location based info when building production SSR apps, e.g. NextJS. Client vs. Server, Staging vs. Production, etc.",
   "main": "lib/index.js",
   "directories": {
     "lib": "lib"
   },
   "scripts": {
+    "build": "node_modules/.bin/babel ./src/index.js -o ./lib/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -28,5 +29,11 @@
   "bugs": {
     "url": "https://github.com/layerframe/whereami/issues"
   },
-  "homepage": "https://github.com/layerframe/whereami#readme"
+  "homepage": "https://github.com/layerframe/whereami#readme",
+  "devDependencies": {
+    "@babel/cli": "^7.7.5",
+    "@babel/core": "^7.7.5",
+    "@babel/node": "^7.7.4",
+    "@babel/preset-env": "^7.7.6"
+  }
 }
