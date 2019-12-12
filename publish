@@ -31,16 +31,14 @@ if [ -d ".git" ]; then
 		git commit -m "Bump to ${version}"
 		git tag -a "${output}" -m "${version}"
 		git push origin --tags
-		npm publish ./
+
+    # Run the build to compile module
+    npm run build
+
+		npm publish ./ --access public
 	else
 		echo "Please commit staged files prior to bumping"
 	fi
 else
   bump "package.json"
 fi
-
-# Run the build to compile module
-npm run build
-
-# Publish to npm
-npm publish --access public
