@@ -95,9 +95,9 @@ const onStaging = () => {
 const isLocal = process.env.NODE_ENV === 'development'
 
 /**
- * isDev
+ * onDev
  */
-const isDev = () => {
+const onDev = () => {
   // Client
   if (process.browser && !isServer) {
     return window.location.hostname.indexOf(stagingUrl) > -1
@@ -139,9 +139,9 @@ module.exports = {
   isClient: process.browser && typeof window !== 'undefined',
   isServer: typeof window === 'undefined',
   isStaging: onStaging(), // Production Staging
-  isLocal: isLocal, // Development
-  isDev: isDev, // Local
-  isProduction: !onStaging(), // Production
+  isLocal: isLocal, // Local
+  isDev: onDev(), // Development
+  isProduction: !onStaging() && !onDev(), // Production
   host: getHostname(),
   /**
    * Initialize the module with settings
