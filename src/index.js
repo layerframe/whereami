@@ -34,17 +34,23 @@ const localUrl = 'http://localhost'
 const protocol = 'https://'
 let stagingUrl = process.env.STAGING_URL || process.env.STAGE_URL
 let productionUrl = process.env.LIVE_URL || process.env.PRODUCTION_URL
+let developUrl = process.env.DEVELOP_URL || process.env.DEVELOPMENT_URL
 let gcpCheck = process.env.WHEREAMI_GCP_CHECK || false
-let gcpStagingKey = process.env.WHEREAMI_GCP_STAGE_KEY || null
+let gcpStagingKey = process.env.WHEREAMI_GCP_STAGE_KEY || '-staging'
+let gcpDevelopKey = process.env.WHEREAMI_GCP_DEV_KEY || '-develop'
 let gcpProject = process.env.GOOGLE_CLOUD_PROJECT || null
 
 const isServer = typeof window === 'undefined'
 
 // Checks
+// Server
 if (!stagingUrl && isServer) console.log('WARNING: whereami was unable to find a staging url on the SERVER. Set via STAGE_URL environment variable.')
 if (!productionUrl && isServer) console.log('WARNING: whereami was unable to find a production url on the SERVER. Set via LIVE_URL environment variable.')
+if (!developUrl && isServer) console.log('WARNING: whereami was unable to find a develop url on the SERVER. Set via DEVELOP_URL environment variable.')
+// Client
 if (!stagingUrl && !isServer) console.log('WARNING: whereami was unable to find a staging url on the CLIENT. Set via STAGE_URL environment variable.')
 if (!productionUrl && !isServer) console.log('WARNING: whereami was unable to find a production url on the CLIENT. Set via LIVE_URL environment variable.')
+if (!developUrl && !isServer) console.log('WARNING: whereami was unable to find a develop url on the CLIENT. Set via DEVELOP_URL environment variable.')
 
 /**
  * getHostname
@@ -69,14 +75,23 @@ const onStaging = () => {
   if (gcpCheck) {
     console.log('Checking GCP for the staging key.')
     if (!gcpStagingKey) {
-      console.log('WARNING: You need to provide a WHEREAMI_GCP_STAGE_KEY environment variable.') 
+      console.log('WARNING: You need to provide a WHEREAMI_GCP_STAGE_KEY environment variable.')
       return false
     }
-    const gcpKeyFound = gcpProject.indexOf(gcpStagingKey) > -1
-    if (gcpKeyFound) {
+    if (!gcpDevelopKey) {
+      console.log('WARNING: You need to provide a WHEREAMI_GCP_STAGE_KEY environment variable.')
+      return false
+    }
+    const gcpStagingKeyFound = gcpProject.indexOf(gcpStagingKey) > -1
+    let gcpKeyFound = false
+    if (gcpStagingKeyFound) {
       console.log('Found the GCP staging key', gcpStagingKey)
-    } else {
-      console.log('Unable to find the GCP staging key ', gcpStagingKey)
+      gcpKeyFound = true
+    }
+    const gcpDevelopKeyFound = gcpProject.indexOf(gcpDevelopKey) > -1
+    if (gcpDevelopKeyFound) {
+      console.log('Found the GCP develop key', gcpDevelopKey)
+      gcpKeyFound = true
     }
     // Check the name of the GCP project by the key provided
     return gcpKeyFound
@@ -92,7 +107,7 @@ const isDev = process.env.NODE_ENV === 'development'
 
 module.exports = {
   log: () => {
-    if (typeof console !== 'undefined') { 
+    if (typeof console !== 'undefined') {
       console.log('\n')
       console.log('-- WHEREAMI ENVIRONMENT VARIABLES --')
       console.log('Staging url:', stagingUrl)
@@ -117,8 +132,8 @@ module.exports = {
   /**
    * Initialize the module with settings
    * If no settings are passed, settings are fetched from env vars.
-   * @param {string} staging Your staging url 
-   * @param {string} production Your production url 
+   * @param {string} staging Your staging url
+   * @param {string} production Your production url
    * @return {void}
    */
   init: (staging, production) => {
