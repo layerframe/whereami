@@ -78,20 +78,9 @@ const onStaging = () => {
       console.log('WARNING: You need to provide a WHEREAMI_GCP_STAGE_KEY environment variable.')
       return false
     }
-    if (!gcpDevelopKey) {
-      console.log('WARNING: You need to provide a WHEREAMI_GCP_STAGE_KEY environment variable.')
-      return false
-    }
-    const gcpStagingKeyFound = gcpProject.indexOf(gcpStagingKey) > -1
-    let gcpKeyFound = false
+    const gcpKeyFound = gcpProject.indexOf(gcpStagingKey) > -1
     if (gcpStagingKeyFound) {
       console.log('Found the GCP staging key', gcpStagingKey)
-      gcpKeyFound = true
-    }
-    const gcpDevelopKeyFound = gcpProject.indexOf(gcpDevelopKey) > -1
-    if (gcpDevelopKeyFound) {
-      console.log('Found the GCP develop key', gcpDevelopKey)
-      gcpKeyFound = true
     }
     // Check the name of the GCP project by the key provided
     return gcpKeyFound
@@ -101,9 +90,34 @@ const onStaging = () => {
 }
 
 /**
+ * isLocal
+ */
+const isLocal = process.env.NODE_ENV === 'development'
+
+/**
  * isDev
  */
-const isDev = process.env.NODE_ENV === 'development'
+const isDev = () => {
+  // Client
+  if (process.browser && !isServer) {
+    return window.location.hostname.indexOf(stagingUrl) > -1
+  }
+  if (gcpCheck) {
+    console.log('Checking GCP for the development key.')
+    if (!gcpDevelopKey) {
+      console.log('WARNING: You need to provide a WHEREAMI_GCP_DEVELOP_KEY environment variable.')
+      return false
+    }
+    const gcpKeyFound = gcpProject.indexOf(gcpDevelopKey) > -1
+    if (gcpKeyFound) {
+      console.log('Found the GCP develop key', gcpDevelopKey)
+    }
+    // Check the name of the GCP project by the key provided
+    return gcpKeyFound
+  }
+  // Server hostname check
+  return os.hostname().indexOf(developUrl) > -1
+}
 
 module.exports = {
   log: () => {
@@ -125,8 +139,8 @@ module.exports = {
   isClient: process.browser && typeof window !== 'undefined',
   isServer: typeof window === 'undefined',
   isStaging: onStaging(), // Production Staging
-  isLocal: isDev, // Development
-  isDev: isDev, // Development
+  isLocal: isLocal, // Development
+  isDev: isDev, // Local
   isProduction: !onStaging(), // Production
   host: getHostname(),
   /**
