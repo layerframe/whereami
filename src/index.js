@@ -44,13 +44,31 @@ const isServer = typeof window === 'undefined'
 
 // Checks
 // Server
-if (!stagingUrl && isServer) console.log('WARNING: whereami was unable to find a staging url on the SERVER. Set via STAGE_URL environment variable.')
-if (!productionUrl && isServer) console.log('WARNING: whereami was unable to find a production url on the SERVER. Set via LIVE_URL environment variable.')
-if (!developUrl && isServer) console.log('WARNING: whereami was unable to find a develop url on the SERVER. Set via DEVELOP_URL environment variable.')
+if (!stagingUrl && isServer)
+  console.log(
+    'WARNING: whereami was unable to find a staging url on the SERVER. Set via STAGE_URL environment variable.'
+  )
+if (!productionUrl && isServer)
+  console.log(
+    'WARNING: whereami was unable to find a production url on the SERVER. Set via LIVE_URL environment variable.'
+  )
+if (!developUrl && isServer)
+  console.log(
+    'WARNING: whereami was unable to find a develop url on the SERVER. Set via DEVELOP_URL environment variable.'
+  )
 // Client
-if (!stagingUrl && !isServer) console.log('WARNING: whereami was unable to find a staging url on the CLIENT. Set via STAGE_URL environment variable.')
-if (!productionUrl && !isServer) console.log('WARNING: whereami was unable to find a production url on the CLIENT. Set via LIVE_URL environment variable.')
-if (!developUrl && !isServer) console.log('WARNING: whereami was unable to find a develop url on the CLIENT. Set via DEVELOP_URL environment variable.')
+if (!stagingUrl && !isServer)
+  console.log(
+    'WARNING: whereami was unable to find a staging url on the CLIENT. Set via STAGE_URL environment variable.'
+  )
+if (!productionUrl && !isServer)
+  console.log(
+    'WARNING: whereami was unable to find a production url on the CLIENT. Set via LIVE_URL environment variable.'
+  )
+if (!developUrl && !isServer)
+  console.log(
+    'WARNING: whereami was unable to find a develop url on the CLIENT. Set via DEVELOP_URL environment variable.'
+  )
 
 /**
  * getHostname
@@ -75,7 +93,9 @@ const onStaging = () => {
   if (gcpCheck) {
     console.log('Checking GCP for the staging key.')
     if (!gcpStagingKey) {
-      console.log('WARNING: You need to provide a WHEREAMI_GCP_STAGE_KEY environment variable.')
+      console.log(
+        'WARNING: You need to provide a WHEREAMI_GCP_STAGE_KEY environment variable.'
+      )
       return false
     }
     const gcpKeyFound = gcpProject.indexOf(gcpStagingKey) > -1
@@ -105,7 +125,9 @@ const onDev = () => {
   if (gcpCheck) {
     console.log('Checking GCP for the development key.')
     if (!gcpDevelopKey) {
-      console.log('WARNING: You need to provide a WHEREAMI_GCP_DEVELOP_KEY environment variable.')
+      console.log(
+        'WARNING: You need to provide a WHEREAMI_GCP_DEVELOP_KEY environment variable.'
+      )
       return false
     }
     const gcpKeyFound = gcpProject.indexOf(gcpDevelopKey) > -1
@@ -150,16 +172,21 @@ module.exports = {
    * @param {string} production Your production url
    * @return {void}
    */
-  init: (staging, production) => {
-      let fStaging = staging || process.env.STAGING_URL || process.env.STAGE_URL
-      let fProduction = production || process.env.LIVE_URL || process.env.PRODUCTION_URL
-      if (!fStaging) throw Error('You must provide a staging url.')
-      if (!fProduction) throw Error('You must provide a production url.')
+  init: (staging, production, develop) => {
+    let fStaging = staging || process.env.STAGING_URL || process.env.STAGE_URL
+    let fProduction =
+      production || process.env.LIVE_URL || process.env.PRODUCTION_URL
+    let fDevelop =
+      develop || process.env.DEVELOP_URL || process.env.DEVELOPMENT_URL || null
+    if (!fStaging) throw Error('You must provide a staging url.')
+    if (!fProduction) throw Error('You must provide a production url.')
     stagingUrl = fStaging
     productionUrl = fProduction
+    developUrl = fDevelop
     return {
-        staging: stagingUrl,
-        production: productionUrl,
+      staging: stagingUrl,
+      production: productionUrl,
+      develop: developUrl,
     }
   },
   now: () => {
@@ -168,11 +195,21 @@ module.exports = {
       // Client stuff
       if (process.env.NODE_ENV === 'production') {
         let isStaging = false
-        console.log('whereami client checking the window.location.hostname and found', window.location.hostname)
+        let isDevelop = false
+        console.log(
+          'whereami client checking the window.location.hostname and found',
+          window.location.hostname
+        )
         isStaging = onStaging()
         console.log('whereami client on staging?', isStaging)
+        isDevelop = onDev()
+        console.log('whereami client on develop?', isDevelop)
         // Update the host
-        host = isStaging ? `${protocol}${stagingUrl}` : `${protocol}${productionUrl}`
+        host = isDevelop
+          ? `${protocol}${developUrl}`
+          : isStaging
+          ? `${protocol}${stagingUrl}`
+          : `${protocol}${productionUrl}`
       }
 
       return host
@@ -181,7 +218,9 @@ module.exports = {
     // Server stuff
     if (gcpProject) {
       if (!gcpCheck) {
-        console.log('Consider using the Google Cloud Platform staging check via WHEREAMI_GCP_CHECK environement variable.')
+        console.log(
+          'Consider using the Google Cloud Platform staging check via WHEREAMI_GCP_CHECK environement variable.'
+        )
       } else {
         console.log('Google Cloud Project checking is enabled.')
         console.log('GOOGLE_CLOUD_PROJECT:', gcpProject)
@@ -190,5 +229,5 @@ module.exports = {
 
     // This should be updated via the process.env.PORT
     return host
-  }
+  },
 }
