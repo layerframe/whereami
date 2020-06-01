@@ -79,7 +79,7 @@ const onStaging = () => {
       return false
     }
     const gcpKeyFound = gcpProject.indexOf(gcpStagingKey) > -1
-    if (gcpStagingKeyFound) {
+    if (gcpKeyFound) {
       console.log('Found the GCP staging key', gcpStagingKey)
     }
     // Check the name of the GCP project by the key provided
