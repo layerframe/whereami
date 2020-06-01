@@ -100,7 +100,7 @@ const isLocal = process.env.NODE_ENV === 'development'
 const onDev = () => {
   // Client
   if (process.browser && !isServer) {
-    return window.location.hostname.indexOf(stagingUrl) > -1
+    return window.location.hostname.indexOf(developUrl) > -1
   }
   if (gcpCheck) {
     console.log('Checking GCP for the development key.')
