@@ -1,13 +1,13 @@
 {
   "name": "@layerframers/whereami",
-  "version": "1.2.4",
+  "version": "1.2.5",
   "description": "Tools that help with fetching location based info when building production SSR apps, e.g. NextJS. Client vs. Server, Staging vs. Production, etc.",
   "main": "lib/index.js",
   "directories": {
     "lib": "lib"
   },
   "scripts": {
-    "auth": "npm login",
+    "auth": "npm adduser --scope=@layerframers",
     "deploy": "npm publish --access public --scope=@layerframers",
     "build": "node_modules/.bin/babel ./src/index.js -o ./lib/index.js",
     "test": "NODE_ENV=development mocha --require @babel/register test/index.test.js"

@@ -196,14 +196,8 @@ module.exports = {
       if (process.env.NODE_ENV === 'production') {
         let isStaging = false
         let isDevelop = false
-        console.log(
-          'whereami client checking the window.location.hostname and found',
-          window.location.hostname
-        )
         isStaging = onStaging()
-        console.log('whereami client on staging?', isStaging)
         isDevelop = onDev()
-        console.log('whereami client on develop?', isDevelop)
         // Update the host
         host = isDevelop
           ? `${protocol}${developUrl}`
