@@ -151,9 +151,9 @@ module.exports = {
       console.log('Hostname:', getHostname())
       console.log('\n--\n')
       console.log('in Staging environment:', onStaging())
-      console.log('in Development environment:', isDev)
-      console.log('on Server:', isServer)
-      console.log('on Client:', !isServer)
+      console.log('in Development environment:', onDev())
+      console.log('on Server:', typeof window === 'undefined')
+      console.log('on Client:', process.browser && typeof window !== 'undefined')
       console.log('--')
       console.log('\n')
     }
@@ -173,11 +173,11 @@ module.exports = {
    * @return {void}
    */
   init: (staging, production, develop) => {
-    let fStaging = staging || process.env.STAGING_URL || process.env.STAGE_URL
+    let fStaging = staging || process.env.STAGING_URL || process.env.STAGE_URL || process.env.NEXT_PUBLIC_STAGING_URL
     let fProduction =
-      production || process.env.LIVE_URL || process.env.PRODUCTION_URL
+      production || process.env.LIVE_URL || process.env.PRODUCTION_URL || process.env.NEXT_PUBLIC_PRODUCTION_URL || process.env.NEXT_PUBLIC_LIVE_URL
     let fDevelop =
-      develop || process.env.DEVELOP_URL || process.env.DEVELOPMENT_URL || null
+      develop || process.env.DEVELOP_URL || process.env.DEVELOPMENT_URL || process.env.NEXT_PUBLIC_DEVELOPMENT_URL ||  null
     if (!fStaging) throw Error('You must provide a staging url.')
     if (!fProduction) throw Error('You must provide a production url.')
     stagingUrl = fStaging
